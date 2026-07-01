@@ -6,10 +6,12 @@
   <title>stupd summer lovers</title>
   <style>
     @font-face {
-      font-family: 'Unifont';
-      src: url('https://cdn.jsdelivr.net/npm/@fontsource/unifont/files/unifont-latin-400-normal.woff2') format('woff2');
-      font-weight: 400;
-      font-style: normal;
+      font-family: '8x16';
+      src: url('fonts/WebPlus_IBM_VGA_8x16.woff');
+    }
+    @font-face {
+      font-family: '8x14';
+      src: url('fonts/WebPlus_IBM_VGA_8x14.woff');
     }
 
     * {
@@ -19,7 +21,7 @@
     body {
       background-color: #ff00ff;
       color: #001080;
-      font-family: 'Unifont', monospace;
+      font-family: '8x16', monospace;
       font-size: 16px;
       margin: 0;
       padding: 0;
@@ -49,7 +51,7 @@
       pointer-events: none;
     }
 
-    header, main {
+    header {
       position: relative;
       z-index: 2;
 
@@ -60,9 +62,7 @@
         linear-gradient(45deg, #FF5500 25%, transparent 25%, transparent 75%, #FF5500 75%);
       background-size: 4px 4px;
       background-position: 0 0, 2px 2px;
-    }
 
-    header {
       padding-top: 0px;
       display: flex;
       flex-direction: column;
@@ -70,14 +70,49 @@
       width: 100%;
     }
 
+    /* Контейнер ровно под заголовок — как .title-row в INDEX.HTM */
+    .title-row {
+      position: relative;
+      width: 100%;
+      max-width: 640px;
+      height: 64px;
+      margin: 0 auto;
+      z-index: 10;
+    }
+
     h1 {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      margin: 0;
       color: #001080;
-      font-size: 48px;
-      margin: 0 0 6px 0;
+      font-size: 56px;
       font-weight: bold;
+      white-space: nowrap;
+      font-family: '8x14', monospace;
+    }
+
+    /* Обёртка содержимого — как .extended-city-container в INDEX.HTM.
+       Сама без визуала, только структурный группировщик и контейнер
+       для расширения (если потом добавим «городские» декорации). */
+    .extended-content-container {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
     }
 
     main {
+      position: relative;
+      z-index: 3;
+
+      background-color: #F0F000;
+      background-image:
+        linear-gradient(45deg, #FF5500 25%, transparent 25%, transparent 75%, #FF5500 75%),
+        linear-gradient(45deg, #FF5500 25%, transparent 25%, transparent 75%, #FF5500 75%);
+      background-size: 4px 4px;
+      background-position: 0 0, 2px 2px;
+
       width: 100%;
       max-width: 640px;
       margin: 0 auto;
@@ -130,19 +165,23 @@
   <canvas id="bg-canvas"></canvas>
 
   <header>
-    <h1>dear' stupd summer lovers</h1>
+    <div class="title-row">
+      <h1>dear' stupd summer lovers</h1>
+    </div>
   </header>
 
-  <main>
-    <div class="content-row">
-      <div class="text-block">
-        <p>honestly, summer lovers, u guys r such softies.</p>
-        <p>there r three whole seasons in the year dat i absolutely hate, u can probly guess which ones i mean. lets b honest, winter is objectively the best time of the year. nothin beats da coldness.</p>
-        <p>would u rlly prefer sweatin n feelin gross in da hot sun, instead of enjoyin da nice cold weather? like, guys, r u crazy??</p>
-        <p> i-i just want ppl to understand dat u can always hide from da cold. but in da heat, even if u walk around naked, u wont feel any less hot.</p>
+  <div class="extended-content-container">
+    <main>
+      <div class="content-row">
+        <div class="text-block">
+          <p>honestly, summer lovers, u guys r such softies.</p>
+          <p>there r three whole seasons in the year dat i absolutely hate, u can probly guess which ones i mean. lets b honest, winter is objectively the best time of the year. nothin beats da coldness.</p>
+          <p>would u rlly prefer sweatin n feelin gross in da hot sun, instead of enjoyin da nice cold weather? like, guys, r u crazy??</p>
+          <p> i-i just want ppl to understand dat u can always hide from da cold. but in da heat, even if u walk around naked, u wont feel any less hot.</p>
+        </div>
       </div>
-    </div>
-  </main>
+    </main>
+  </div>
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
@@ -168,7 +207,36 @@
         canvas.width = window.innerWidth;
         canvas.height = Math.max(document.body.scrollHeight, window.innerHeight);
         ctx.imageSmoothingEnabled = false;
-        generateFlowers();
+
+        // Ждём готовности шрифтов: до этого момента Unifont ещё не пришёл
+        // с CDN и getBoundingClientRect() для header/main вернёт «фантомную»
+        // высоту, под которую часть цветов всё равно попадёт. После fonts.ready
+        // раскладка уже стабильна, и замеры корректны с первого кадра.
+        const fontsReady = (document.fonts && document.fonts.ready)
+          ? document.fonts.ready
+          : Promise.resolve();
+        fontsReady.then(generateFlowers);
+      }
+
+      function getBlockedRects() {
+        const header = document.querySelector('header');
+        const main = document.querySelector('main');
+        const hRect = header.getBoundingClientRect();
+        const mRect = main.getBoundingClientRect();
+        return {
+          header: {
+            top:    hRect.top    + window.scrollY,
+            bottom: hRect.bottom + window.scrollY,
+            left:   0,
+            right:  canvas.width
+          },
+          main: {
+            top:    mRect.top    + window.scrollY,
+            bottom: mRect.bottom + window.scrollY,
+            left:   mRect.left   + window.scrollX,
+            right:  mRect.right  + window.scrollX
+          }
+        };
       }
 
       function generateFlowers() {
@@ -178,11 +246,7 @@
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         const flowers = [];
-        const header = document.querySelector('header');
-        const main = document.querySelector('main');
-
-        const hRect = header.getBoundingClientRect();
-        const mRect = main.getBoundingClientRect();
+        const blocks = getBlockedRects();
 
         const desiredCount = Math.floor((canvas.width * canvas.height) / 2800);
         const buffer = 20;
@@ -202,26 +266,33 @@
           const x = Math.floor(Math.random() * (canvas.width - spriteSize));
           const y = Math.floor(Math.random() * (canvas.height - spriteSize));
 
-          const inHeader = (x + spriteSize > 0 && x < canvas.width && y + spriteSize > hRect.top + window.scrollY - buffer && y < hRect.bottom + window.scrollY + buffer);
-          const inMain = (x + spriteSize > mRect.left + window.scrollX - buffer && x < mRect.right + window.scrollX + buffer && y + spriteSize > mRect.top + window.scrollY - buffer && y < mRect.bottom + window.scrollY + buffer);
-
+          const inHeader = (
+            x + spriteSize > blocks.header.left  - buffer &&
+            x             < blocks.header.right + buffer &&
+            y + spriteSize > blocks.header.top   - buffer &&
+            y             < blocks.header.bottom + buffer
+          );
+          const inMain = (
+            x + spriteSize > blocks.main.left   - buffer &&
+            x             < blocks.main.right  + buffer &&
+            y + spriteSize > blocks.main.top    - buffer &&
+            y             < blocks.main.bottom + buffer
+          );
           if (inHeader || inMain) continue;
 
           let isOverlapping = false;
           for (let i = 0; i < flowers.length; i++) {
             const f = flowers[i];
-
             if (
-              x < f.x + f.size + minDistance &&
+              x             < f.x + f.size + minDistance &&
               x + spriteSize + minDistance > f.x &&
-              y < f.y + f.size + minDistance &&
+              y             < f.y + f.size + minDistance &&
               y + spriteSize + minDistance > f.y
             ) {
               isOverlapping = true;
               break;
             }
           }
-
           if (isOverlapping) continue;
 
           flowers.push({x, y, size: spriteSize, pixelSize});
@@ -232,32 +303,29 @@
 
         let currentIndex = 0;
         function drawNextFlower() {
-          if (currentIndex < flowers.length) {
+          if (currentIndex >= flowers.length) return;
 
-            let batchSize = Math.floor(Math.random() * 5) + 3;
-
-            for(let i = 0; i < batchSize && currentIndex < flowers.length; i++) {
-              const f = flowers[currentIndex];
-              drawFlower(f.x, f.y, f.pixelSize);
-              currentIndex++;
-            }
-
-            let lag = 0;
-            let freezeChance = Math.random();
-
-            if (freezeChance > 0.96) {
-              lag = Math.floor(Math.random() * 500) + 300;
-            } else if (freezeChance > 0.85) {
-              lag = Math.floor(Math.random() * 150) + 100;
-            } else if (freezeChance > 0.70) {
-              lag = Math.floor(Math.random() * 30) + 20;
-            }
-
-            drawTimeout = setTimeout(drawNextFlower, lag);
+          // Большие пачки — почти моментальная отрисовка.
+          // Раньше было 3–7 цветков за кадр, теперь 8–17.
+          const batchSize = Math.floor(Math.random() * 10) + 8;
+          for (let i = 0; i < batchSize && currentIndex < flowers.length; i++) {
+            const f = flowers[currentIndex];
+            drawFlower(f.x, f.y, f.pixelSize);
+            currentIndex++;
           }
+
+          // Короткие и редкие паузы — оставляем «модемный» намёк,
+          // но он больше не доминирует во времени анимации.
+          const r = Math.random();
+          let lag = 0;
+          if (r > 0.97)      lag = Math.floor(Math.random() * 80) + 20;
+          else if (r > 0.85) lag = Math.floor(Math.random() * 12) + 4;
+
+          drawTimeout = setTimeout(drawNextFlower, lag);
         }
 
-        drawTimeout = setTimeout(drawNextFlower, 1600);
+        // Стартуем сразу — никакой 1.6-секундной паузы в начале.
+        drawTimeout = setTimeout(drawNextFlower, 60);
       }
 
       function drawFlower(x, y, pixelSize) {
