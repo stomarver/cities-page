@@ -1,0 +1,278 @@
+<!DOCTYPE HTML>
+<html lang="ru">
+<head>
+  <meta charset="windows-1251">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>stupd summer lovers</title>
+  <style>
+    @font-face {
+      font-family: 'Unifont';
+      src: url('https://cdn.jsdelivr.net/npm/@fontsource/unifont/files/unifont-latin-400-normal.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #ff00ff;
+      color: #001080;
+      font-family: 'Unifont', monospace;
+      font-size: 16px;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+      position: relative;
+
+      -webkit-font-smoothing: none;
+      -moz-osx-font-smoothing: none;
+      font-smooth: never;
+      text-rendering: optimizeSpeed;
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+
+      /* Дизеринг для розового фона (розовый + чисто красный) */
+      background-image:
+        linear-gradient(45deg, #FF0000 25%, transparent 25%, transparent 75%, #FF0000 75%),
+        linear-gradient(45deg, #FF0000 25%, transparent 25%, transparent 75%, #FF0000 75%);
+      background-size: 4px 4px;
+      background-position: 0 0, 2px 2px;
+    }
+
+    #bg-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    header, main {
+      position: relative;
+      z-index: 2;
+
+      /* Дизеринг для жёлтых блоков (жёлтый + чисто оранжевый) */
+      background-color: #F0F000;
+      background-image:
+        linear-gradient(45deg, #FF5500 25%, transparent 25%, transparent 75%, #FF5500 75%),
+        linear-gradient(45deg, #FF5500 25%, transparent 25%, transparent 75%, #FF5500 75%);
+      background-size: 4px 4px;
+      background-position: 0 0, 2px 2px;
+    }
+
+    header {
+      padding-top: 0px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
+
+    h1 {
+      color: #001080;
+      font-size: 48px;
+      margin: 0 0 6px 0;
+      font-weight: bold;
+    }
+
+    main {
+      width: 100%;
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 8px 20px 8px 20px;
+    }
+
+    .content-row {
+      width: 100%;
+    }
+
+    .text-block {
+      width: 100%;
+      text-align: left;
+    }
+
+    p {
+      line-height: 1.4;
+      margin: 0 0 24px 0;
+    }
+
+    p:last-child {
+      margin-bottom: 0;
+    }
+
+    .exit-link {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      text-decoration: none;
+      display: inline-block;
+      transform: scale(2);
+      transform-origin: right top;
+      z-index: 10;
+    }
+
+    .exit-sprite {
+      display: block;
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+
+  <a href="INDEX.HTM" class="exit-link">
+    <img src="EXIT.BMP" alt="exit" class="exit-sprite">
+  </a>
+
+  <canvas id="bg-canvas"></canvas>
+
+  <header>
+    <h1>dear' stupd summer lovers</h1>
+  </header>
+
+  <main>
+    <div class="content-row">
+      <div class="text-block">
+        <p>honestly, summer lovers, u guys r such softies.</p>
+        <p>there r three whole seasons in the year dat i absolutely hate, u can probly guess which ones i mean. lets b honest, winter is objectively the best time of the year. nothin beats da coldness.</p>
+        <p>would u rlly prefer sweatin n feelin gross in da hot sun, instead of enjoyin da nice cold weather? like, guys, r u crazy??</p>
+        <p> i-i just want ppl to understand dat u can always hide from da cold. but in da heat, even if u walk around naked, u wont feel any less hot.</p>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const canvas = document.getElementById('bg-canvas');
+      const ctx = canvas.getContext('2d');
+
+      // Кислотные цвета без розового и зеленого
+      const petalColors = [
+        '#00FFFF', // Электрический бирюзовый
+        '#0000FF', // Глубокий синий
+        '#7700FF', // Электрический фиолетовый
+      ];
+
+      // Сердцевины только белые и желтые
+      const centerColors = [
+        '#FFFFFF', // Ослепительно белый
+        '#FFFF00'  // Яркий желтый
+      ];
+
+      let drawTimeout = null;
+
+      function initCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = Math.max(document.body.scrollHeight, window.innerHeight);
+        ctx.imageSmoothingEnabled = false;
+        generateFlowers();
+      }
+
+      function generateFlowers() {
+        if (drawTimeout) {
+          clearTimeout(drawTimeout);
+        }
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        const flowers = [];
+        const header = document.querySelector('header');
+        const main = document.querySelector('main');
+
+        const hRect = header.getBoundingClientRect();
+        const mRect = main.getBoundingClientRect();
+
+        const desiredCount = Math.floor((canvas.width * canvas.height) / 2800);
+        const buffer = 20;
+        const minDistance = 15;
+
+        let placed = 0;
+        let attempts = 0;
+        const maxAttempts = desiredCount * 10;
+
+        while (placed < desiredCount && attempts < maxAttempts) {
+          attempts++;
+
+          const isLarge = Math.random() < 0.5;
+          const pixelSize = isLarge ? 6 : 3;
+          const spriteSize = pixelSize * 3;
+
+          const x = Math.floor(Math.random() * (canvas.width - spriteSize));
+          const y = Math.floor(Math.random() * (canvas.height - spriteSize));
+
+          const inHeader = (x + spriteSize > 0 && x < canvas.width && y + spriteSize > hRect.top + window.scrollY - buffer && y < hRect.bottom + window.scrollY + buffer);
+          const inMain = (x + spriteSize > mRect.left + window.scrollX - buffer && x < mRect.right + window.scrollX + buffer && y + spriteSize > mRect.top + window.scrollY - buffer && y < mRect.bottom + window.scrollY + buffer);
+
+          if (inHeader || inMain) continue;
+
+          let isOverlapping = false;
+          for (let i = 0; i < flowers.length; i++) {
+            const f = flowers[i];
+
+            if (
+              x < f.x + f.size + minDistance &&
+              x + spriteSize + minDistance > f.x &&
+              y < f.y + f.size + minDistance &&
+              y + spriteSize + minDistance > f.y
+            ) {
+              isOverlapping = true;
+              break;
+            }
+          }
+
+          if (isOverlapping) continue;
+
+          flowers.push({x, y, size: spriteSize, pixelSize});
+          placed++;
+        }
+
+        flowers.sort((a, b) => a.x - b.x);
+
+        let currentIndex = 0;
+        function drawNextFlower() {
+          if (currentIndex < flowers.length) {
+
+            let batchSize = Math.floor(Math.random() * 5) + 3;
+
+            for(let i = 0; i < batchSize && currentIndex < flowers.length; i++) {
+              const f = flowers[currentIndex];
+              drawFlower(f.x, f.y, f.pixelSize);
+              currentIndex++;
+            }
+
+            let lag = 0;
+            let freezeChance = Math.random();
+
+            if (freezeChance > 0.96) {
+              lag = Math.floor(Math.random() * 500) + 300;
+            } else if (freezeChance > 0.85) {
+              lag = Math.floor(Math.random() * 150) + 100;
+            } else if (freezeChance > 0.70) {
+              lag = Math.floor(Math.random() * 30) + 20;
+            }
+
+            drawTimeout = setTimeout(drawNextFlower, lag);
+          }
+        }
+
+        drawTimeout = setTimeout(drawNextFlower, 1600);
+      }
+
+      function drawFlower(x, y, pixelSize) {
+        ctx.fillStyle = petalColors[Math.floor(Math.random() * petalColors.length)];
+        ctx.fillRect(x + pixelSize, y, pixelSize, pixelSize);
+        ctx.fillRect(x, y + pixelSize, pixelSize, pixelSize);
+        ctx.fillRect(x + 2 * pixelSize, y + pixelSize, pixelSize, pixelSize);
+        ctx.fillRect(x + pixelSize, y + 2 * pixelSize, pixelSize, pixelSize);
+        ctx.fillStyle = centerColors[Math.floor(Math.random() * centerColors.length)];
+        ctx.fillRect(x + pixelSize, y + pixelSize, pixelSize, pixelSize);
+      }
+
+      window.addEventListener('resize', initCanvas);
+      initCanvas();
+    });
+  </script>
+</body>
+</html>
