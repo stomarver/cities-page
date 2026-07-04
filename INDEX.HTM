@@ -1,10 +1,9 @@
-<!DOCTYPE HTML>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html lang="en">
 <head>
-  <meta charset="windows-1251">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
   <title>WELCOM</title>
-  <style>
+  <style type="text/css">
     @font-face {
       font-family: '8x16';
       src: url('fonts/WebPlus_IBM_VGA_8x16.woff');
@@ -13,47 +12,38 @@
       font-family: '8x14';
       src: url('fonts/WebPlus_IBM_VGA_8x14.woff');
     }
-
-    * {
-      box-sizing: border-box;
-    }
-
+    * { box-sizing: border-box; }
     body {
       background-color: #000000;
       color: #FFFF99;
-      font-family: '8x16';
+      font-family: '8x16', monospace;
       font-size: 16px;
       margin: 0;
       padding: 0;
       overflow-x: hidden;
-      position: relative;
-
       -webkit-font-smoothing: none;
       -moz-osx-font-smoothing: none;
       font-smooth: never;
       image-rendering: pixelated;
       image-rendering: crisp-edges;
     }
-
     header {
       background-color: #000033;
-      padding-top: 0px;
+      padding-top: 0;
       display: flex;
       flex-direction: column;
       align-items: center;
       width: 100%;
       position: relative;
     }
-
     .title-row {
       position: relative;
       width: 100%;
       max-width: 640px;
-      height: 64px;      /* под высоту шрифта 48px + небольшой запас */
+      height: 64px;
       margin: 0 auto;
       z-index: 10;
     }
-
     h1 {
       position: absolute;
       left: 50%;
@@ -66,13 +56,12 @@
       white-space: nowrap;
       font-family: '8x14', monospace;
     }
-
     .projects-link {
       position: absolute;
-      left: 40%;                /* стартуем от центра */
+      left: 40%;
       top: 50%;
-      transform: translate(185px, -50%); /* смещение вправо относительно центра */
-      font-size: 56px;           /* ровно в 1.5 раза меньше WELCOM */
+      transform: translate(185px, -50%);
+      font-size: 56px;
       font-weight: bold;
       text-transform: uppercase;
       color: #FFFF00;
@@ -80,23 +69,18 @@
       white-space: nowrap;
       font-family: '8x14', monospace;
     }
-
-    .projects-link:hover {
-      color: #FFFFFF;
-      text-decoration: none;
-    }
-
+    .projects-link:hover { color: #FFFFFF; }
     .skyline {
       display: flex;
       align-items: flex-end;
       justify-content: space-evenly;
       width: 100%;
       max-width: 640px;
-      height: 0px;
+      height: 0;
       padding: 0;
     }
-
-    .skyline .bar, .skyline-extended .bar {
+    .skyline .bar,
+    .skyline-extended .bar {
       background-color: #000099;
       background-image:
         linear-gradient(90deg, #000066 4px, transparent 4px),
@@ -104,30 +88,26 @@
       background-size: 12px 12px;
       background-position: 0 0;
     }
-
-    .bar-1 { width: calc(8 * 12px + 4px); }
-    .bar-2 { width: calc(7 * 12px + 4px); }
-    .bar-3 { width: calc(5 * 12px + 4px); }
-    .bar-4 { width: calc(4 * 12px + 4px); }
-    .bar-5 { width: calc(5 * 12px + 4px); }
-    .bar-6 { width: calc(7 * 12px + 4px); }
-    .bar-7 { width: calc(8 * 12px + 4px); }
-
-    .skyline .bar-1 { height: calc(4 * 12px + 4px); }
-    .skyline .bar-2 { height: calc(2 * 12px + 4px); }
-    .skyline .bar-3 { height: calc(3 * 12px + 4px); }
-    .skyline .bar-4 { height: calc(4 * 12px + 4px); }
-    .skyline .bar-5 { height: calc(1 * 12px + 4px); }
-    .skyline .bar-6 { height: calc(4 * 12px + 4px); }
-    .skyline .bar-7 { height: calc(1 * 12px + 4px); }
-
+    .bar-1 { width: 100px; }
+    .bar-2 { width: 88px; }
+    .bar-3 { width: 64px; }
+    .bar-4 { width: 52px; }
+    .bar-5 { width: 64px; }
+    .bar-6 { width: 88px; }
+    .bar-7 { width: 100px; }
+    .skyline .bar-1 { height: 52px; }
+    .skyline .bar-2 { height: 28px; }
+    .skyline .bar-3 { height: 40px; }
+    .skyline .bar-4 { height: 52px; }
+    .skyline .bar-5 { height: 16px; }
+    .skyline .bar-6 { height: 52px; }
+    .skyline .bar-7 { height: 16px; }
     .extended-city-container {
       position: relative;
       width: 100%;
       background-color: #000033;
       overflow: hidden;
     }
-
     .extended-city-container::before {
       content: '';
       position: absolute;
@@ -138,7 +118,6 @@
       background-color: #000000;
       z-index: 2;
     }
-
     .extended-city-container::after {
       content: '';
       position: absolute;
@@ -149,7 +128,6 @@
       background-color: #000000;
       z-index: 2;
     }
-
     .skyline-extended {
       position: absolute;
       top: 0;
@@ -164,11 +142,7 @@
       pointer-events: none;
       z-index: 1;
     }
-
-    .skyline-extended .bar {
-      height: 100%;
-    }
-
+    .skyline-extended .bar { height: 100%; }
     main {
       width: 100%;
       max-width: 640px;
@@ -177,25 +151,10 @@
       position: relative;
       z-index: 3;
     }
-
-    .content-row {
-      width: 100%;
-    }
-
-    .text-block {
-      width: 100%;
-      text-align: left;
-    }
-
-    p {
-      line-height: 1.4;
-      margin: 0 0 24px 0;
-    }
-
-    p:last-child {
-      margin-bottom: 0;
-    }
-
+    .content-row { width: 100%; }
+    .text-block { width: 100%; text-align: left; }
+    p { line-height: 1.4; margin: 0 0 24px 0; }
+    p:last-child { margin-bottom: 0; }
     .sun-link {
       position: absolute;
       top: 8px;
@@ -206,16 +165,42 @@
       transform-origin: right top;
       z-index: 10;
     }
-
     .sun-sprite {
       display: block;
       image-rendering: pixelated;
       image-rendering: crisp-edges;
       border: none;
     }
+    :root {
+      --construction-scale: 2;
+      --construction-h: 84px;
+    }
+    .construction-outer {
+      padding-top: 32px;
+      padding-bottom: 48px;
+    }
+    .construction-gif {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      margin-bottom: calc(var(--construction-h) * (var(--construction-scale) - 1));
+      transform: scale(var(--construction-scale));
+      transform-origin: top center;
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+      border: none;
+    }
+    @media (max-width: 540px) {
+      :root { --construction-scale: 1.5; }
+      .construction-outer { padding-top: 24px; padding-bottom: 32px; }
+    }
+    @media (max-width: 400px) {
+      :root { --construction-scale: 1.25; }
+      .construction-outer { padding-top: 20px; padding-bottom: 24px; }
+    }
   </style>
 </head>
-<body>
+<body bgcolor="#000000" text="#FFFF99" link="#FFFF00" vlink="#FFFF00" alink="#FFFFFF">
 
   <a href="SUMMER.HTM" class="sun-link">
     <img src="SUN.BMP" alt="sun" class="sun-sprite">
@@ -238,7 +223,6 @@
   </header>
 
   <div class="extended-city-container">
-
     <div class="skyline-extended">
       <div class="bar bar-1"></div>
       <div class="bar bar-2"></div>
@@ -252,19 +236,16 @@
     <main>
       <div class="content-row">
         <div class="text-block">
-          <p>
-            im a.. 3d artist who likes makin stuff in Blender n Krita. i spend lots of time makin models, drawin, animatin, an sometimes tryin to make mods too!!
-          </p>
-          <p>
-            i play UT99 an Terraria wif frens sometimes.
-          </p>
-          <p>
-            if u found dis tiny page, welcom!! feel free to look around. maybe u find somethin u like. have a nice day!! :3
-          </p>
+          <p>im a.. 3d artist who likes makin stuff in Blender n Krita. i spend lots of time makin models, drawin, animatin, an sometimes tryin to make mods too!!</p>
+          <p>i play UT99 an Terraria wif frens sometimes.</p>
+          <p>if u found dis tiny page, welcom!! feel free to look around. maybe u find somethin u like. have a nice day!! :3</p>
         </div>
       </div>
     </main>
+  </div>
 
+  <div class="construction-outer">
+    <img src="ReaperGlowEyes.gif" alt="UNDER CONSTRUCTION" class="construction-gif">
   </div>
 
 </body>
