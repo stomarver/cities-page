@@ -1,0 +1,34 @@
+# CITIES.PG — home page declaration
+# Loaded by PG.JS into the SH.JS shell.
+
+@shell
+main-width: 480
+
+@meta
+title: WELCOM
+
+# header center → PROJECTS
+@header center
+type: link
+href: PROJECTS.HTM
+text: PROJECTS
+size: 48
+line: 48
+color: #ffff00
+hover: #ffffff
+font: 8x14
+bold: yes
+uppercase: yes
+
+# main text flow — height follows content
+@main flow
+color: #ffff99
+size: 16
+line: 16
+gap: 16
+---
+im a.. 3d artist who likes makin stuff in Blender n Krita. i spend lots of time makin models, drawin, animatin, an sometimes tryin to make mods too!!
+---
+i play UT99 an Terraria wif frens sometimes.
+---
+if u found dis tiny page, welcom!! feel free to look around. maybe u find somethin u like. have a nice day!! :3
